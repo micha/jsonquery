@@ -355,6 +355,11 @@ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2
   if(typeof namespace == "function"){
     namespace("json::JSONQuery", JSONQuery);
   }
+  else if (exports) {
+    // as a serverJS module: 
+    // https://wiki.mozilla.org/ServerJS/Modules/SecurableModules
+    exports["JSONQuery"] = JSONQuery;
+  }
   else {
     window["JSONQuery"] = JSONQuery;
   }
