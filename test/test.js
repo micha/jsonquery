@@ -338,4 +338,30 @@ var tests = function($) {
     jqUnit.ok(result[2].last == 'pass' && result[2].first == 'joe', "should return a correctly ordered result");
   });
 
+  jqUnit.test('serverJS loading', function() {
+    var js,JSONQuery,result;
+
+    function require() {
+      var exports={};
+      eval(js);
+      return exports;
+    }
+
+    $.ajax(
+      {
+        url: "../JSONQuery.js",
+        async: false,
+        dataType: "text",
+        success: function(data) {
+          js = data;
+        }
+      }
+    );
+    jqUnit.ok(typeof JSONQuery == "undefined", "should start with JSONQuery undefined");
+    jqUnit.ok(js.length > 200, "should fetch JSONQuery.js via xhr");
+    
+    JSONQuery = require().JSONQuery;
+    result = JSONQuery("?foo='bar'", collection);
+    jqUnit.equals(result.length, 1, "should return the correct number of results");
+  });
 }(jQuery);
